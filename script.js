@@ -12,20 +12,25 @@ function toggleTheme(){
 }
 document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
-// Burger + drawer
-const burger = document.getElementById('burger');
-const drawer = document.getElementById('drawer');
+// Burger + drawer + backdrop + esc
+const burger   = document.getElementById('burger');
+const drawer   = document.getElementById('drawer');
+const backdrop = document.getElementById('backdrop');
 const drawerLinks = drawer.querySelectorAll('a');
 
-const toggleDrawer = (open) => {
+function setDrawer(open){
   drawer.classList.toggle('open', open);
   burger.setAttribute('aria-expanded', String(open));
   drawer.setAttribute('aria-hidden', String(!open));
-};
-burger.addEventListener('click', () => toggleDrawer(!drawer.classList.contains('open')));
-drawerLinks.forEach(a => a.addEventListener('click', () => toggleDrawer(false)));
+  backdrop.hidden = !open;
+  backdrop.classList.toggle('show', open);
+}
+burger.addEventListener('click', () => setDrawer(!drawer.classList.contains('open')));
+backdrop.addEventListener('click', () => setDrawer(false));
+document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') setDrawer(false); });
+drawerLinks.forEach(a => a.addEventListener('click', () => setDrawer(false)));
 
-// Nav attiva su scroll
+// nav attiva su scroll
 const sections = [...document.querySelectorAll('section[id]')];
 const topLinks = [...document.querySelectorAll('.nav a')];
 const linkById = id => topLinks.find(a => a.getAttribute('href') === `#${id}`);
@@ -44,11 +49,19 @@ sections.forEach(s => io.observe(s));
 // GLightbox
 GLightbox({ selector: '.glightbox', openEffect: 'zoom', closeEffect: 'zoom', loop: true });
 
-// Swiper
+// Swiper (trips) — niente buco a sinistra
 new Swiper('.trips-swiper', {
-  slidesPerView: 1.1, spaceBetween: 12, centeredSlides: true,
+  slidesPerView: 1.05,
+  spaceBetween: 12,
+  centeredSlides: false,
+  slidesOffsetBefore: 16,
+  slidesOffsetAfter: 16,
   pagination: { el: '.swiper-pagination', clickable: true },
-  breakpoints: { 640:{slidesPerView:1.3}, 960:{slidesPerView:2.2}, 1200:{slidesPerView:2.8} }
+  breakpoints: {
+    640:  { slidesPerView: 1.3, slidesOffsetBefore: 24, slidesOffsetAfter: 24 },
+    960:  { slidesPerView: 2.1, slidesOffsetBefore: 24, slidesOffsetAfter: 24 },
+    1200: { slidesPerView: 2.6, slidesOffsetBefore: 24, slidesOffsetAfter: 24 }
+  }
 });
 
 // GSAP: animazioni base
@@ -82,14 +95,13 @@ gsap.utils.toArray('.feature').forEach(el=>{
     scrollTrigger:{ trigger:el, start:'top 85%' }});
 });
 
-// Highlights counter (più lento + easing)
+// Highlights counter (lento con easing)
 function animateCount(el, target, duration = 3200) {
   const start = performance.now();
-  const from = 0;
   function tick(now){
     const p = Math.min(1, (now - start) / duration);
     const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
-    el.textContent = Math.round(from + (target - from) * eased);
+    el.textContent = Math.round(target * eased);
     if (p < 1) requestAnimationFrame(tick);
   }
   requestAnimationFrame(tick);
@@ -102,19 +114,30 @@ document.querySelectorAll('.hl strong').forEach(el => {
   });
 });
 
-// Showcase: cambia sfondo mentre i pannelli sticky entrano
+// SHOWCASE: mobile-friendly (immagini assolute + pane attivo)
 const showcase = document.querySelector('.showcase');
 if (showcase) {
-  const panes = document.querySelectorAll('.showcase .pane');
-  if (panes[0]) showcase.style.backgroundImage = `url(${panes[0].dataset.img})`;
-  const so = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        showcase.style.backgroundImage = `url(${e.target.dataset.img})`;
-      }
+  const imgs  = Array.from(showcase.querySelectorAll('.show-img'));
+  const panes = Array.from(showcase.querySelectorAll('.pane'));
+
+  function setActiveByIndex(idx){
+    imgs.forEach((im,i)=> im.classList.toggle('active', i===idx));
+    panes.forEach((p ,i)=> p.classList.toggle('active',  i===idx));
+  }
+  // observer: il pane più vicino alla sticky top diventa attivo
+  const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
+  function pickActive(){
+    const targetY = headerH + 10;
+    let chosen = 0, best = Infinity;
+    panes.forEach((p,i)=>{
+      const d = Math.abs(p.getBoundingClientRect().top - targetY);
+      if (d < best){ best = d; chosen = i; }
     });
-  }, { rootMargin: '-40% 0px -50% 0px', threshold: 0.01 });
-  panes.forEach(p => so.observe(p));
+    setActiveByIndex(chosen);
+  }
+  pickActive();
+  window.addEventListener('scroll', ()=> requestAnimationFrame(pickActive), {passive:true});
+  window.addEventListener('resize', pickActive);
 }
 
 // MOBILE BAR actions
@@ -125,6 +148,6 @@ function jumpTo(sel){
 document.querySelectorAll('.mb-btn[data-jump]').forEach(btn=>{
   btn.addEventListener('click', ()=> jumpTo(btn.dataset.jump));
 });
-document.getElementById('mb-menu').addEventListener('click', ()=> toggleDrawer(true));
+document.getElementById('mb-menu').addEventListener('click', ()=> setDrawer(true));
 document.getElementById('mb-theme').addEventListener('click', toggleTheme);
 document.getElementById('mb-top').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));

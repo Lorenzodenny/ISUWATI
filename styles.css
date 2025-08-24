@@ -18,7 +18,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 
 /* ===== Header fixed ===== */
 .site-header{
-  position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:70;
+  position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:80;
   display:flex; align-items:center; justify-content:space-between; gap:12px;
   padding:10px 14px; background:rgba(10,12,18,.6); backdrop-filter:saturate(160%) blur(8px);
   border-bottom:1px solid rgba(255,255,255,.06);
@@ -37,15 +37,19 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 
 /* Theme toggle button (icone sempre centrate) */
 .theme-toggle{
-  width:44px; height:44px; display:grid; place-items:center;
+  --size:44px;
+  width:var(--size); height:var(--size);
+  display:grid; place-items:center;
+  padding:8px; overflow:hidden;  /* niente sbordi */
   color:#111; background:var(--paper);
   border:1px solid rgba(255,255,255,.14); border-radius:999px; cursor:pointer;
 }
-.theme-toggle svg{display:block; margin:auto;}
+.theme-toggle svg{width:22px; height:22px; display:block; margin:auto;}
 :root.light .theme-toggle{ color:#111; border-color:rgba(0,0,0,.12) }
-.theme-toggle .icon-sun{display:none; color:#fff}
-:root.light .theme-toggle .icon-moon{display:block}
-:root:not(.light) .theme-toggle .icon-sun{display:block}
+/* default: nascondi entrambe, poi mostra in base al tema */
+.theme-toggle .icon-moon, .theme-toggle .icon-sun{ display:none }
+:root.light .theme-toggle .icon-moon{ display:block }
+:root:not(.light) .theme-toggle .icon-sun{ display:block }
 
 /* Burger */
 .burger{width:44px; height:44px; display:grid; place-content:center; gap:4px;
@@ -53,6 +57,13 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 :root.light .burger{border-color:rgba(0,0,0,.12)}
 .burger span{width:20px; height:2px; background:var(--text); display:block; border-radius:2px}
 @media(min-width:980px){ .burger{display:none} }
+
+/* Backdrop per chiusura a tap fuori */
+.backdrop{
+  position:fixed; inset:0; z-index:79; background:rgba(0,0,0,.45);
+  opacity:0; pointer-events:none; transition:opacity .25s ease;
+}
+.backdrop.show{ opacity:1; pointer-events:auto }
 
 /* Drawer */
 .drawer{position:fixed; inset:0 0 0 auto; width:min(78vw,360px); background:var(--paper);
@@ -107,26 +118,24 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 @media(min-width:760px){ .grid-gallery{grid-template-columns:repeat(3,1fr)} }
 @media(min-width:1100px){ .grid-gallery{grid-template-columns:repeat(4,1fr)} }
 
-/* Showcase (scrollytelling) */
-.showcase{
-  position:relative;
-  height:420vh; /* 4 pannelli */
-  background-position:center;
-  background-size:cover;
-  background-attachment:fixed;
+/* Showcase (mobile-ready) */
+.showcase{ position:relative; height:420vh; }
+.showcase-bg{ position:sticky; top:0; height:100vh; overflow:hidden; z-index:0 }
+.show-img{
+  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  opacity:0; transform:scale(1.04); transition:opacity .5s ease, transform .5s ease;
+  will-change: opacity, transform;
 }
-.showcase::after{
-  content:""; position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.35));
-  pointer-events:none;
-}
+.show-img.active{ opacity:1; transform:scale(1.02) }
+.show-gradient{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.35)) }
 .pane{
-  position:sticky;
-  top:calc(var(--header-h) + 10px);
+  position:relative; z-index:1;
+  position:sticky; top:calc(var(--header-h) + 10px);
   height:calc(100vh - var(--header-h) - var(--mobilebar-h) - 20px);
-  display:grid; place-items:end start;
-  padding:20px;
+  display:grid; place-items:end start; padding:20px;
+  opacity:0; transition:opacity .35s ease; will-change:opacity;
 }
+.pane.active{ opacity:1 }
 .pane h3{
   font-family:Montserrat,Inter,sans-serif;
   font-size:clamp(28px,6vw,56px);
@@ -161,16 +170,18 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 :root.light .mobile-bar{border-top:1px solid rgba(0,0,0,.1)}
 .mb-btn{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
   color:var(--muted); background:transparent; border:none; border-radius:12px; font:inherit; cursor:pointer}
-.mb-btn svg{width:22px; height:22px; fill:currentColor; display:block; margin:auto}
+.mb-btn svg{width:22px; height:22px; display:block; margin:auto; fill:currentColor}
 .mb-btn.primary{color:var(--text); background:rgba(255,255,255,.06)}
 :root.light .mb-btn.primary{background:rgba(0,0,0,.06)}
 .mb-btn span{font-size:11px}
-.mb-sun{display:none; color:#fff}
-:root.light .mb-moon{display:block}
-:root:not(.light) .mb-sun{display:block}
+/* icone tema bottom bar: default hidden, mostra in base al tema */
+.mb-moon, .mb-sun{ display:none }
+:root.light .mb-moon{ display:block }
+:root:not(.light) .mb-sun{ display:block }
+
 @media(min-width:980px){ .mobile-bar{display:none} }
 
-/* spacing bottom to avoid bar overlap on mobile */
+/* spacing bottom per non coprire l’ultima sezione su mobile */
 @media(max-width:979px){
   .section:last-of-type{padding-bottom:calc(70px + var(--mobilebar-h))}
 }

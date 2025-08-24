@@ -56,6 +56,9 @@
     </div>
   </header>
 
+  <!-- BACKDROP per chiusura a tap fuori -->
+  <div id="backdrop" class="backdrop" hidden></div>
+
   <!-- MOBILE DRAWER -->
   <aside id="drawer" class="drawer" aria-hidden="true">
     <nav class="drawer-nav" role="navigation" aria-label="Mobile">
@@ -87,20 +90,12 @@
     </div>
   </section>
 
-  <!-- HIGHLIGHTS (counters) -->
+  <!-- HIGHLIGHTS -->
   <section class="highlights" aria-label="Dati sintetici">
-    <div class="hl">
-      <strong data-count="4">0</strong><span>Amici</span>
-    </div>
-    <div class="hl">
-      <strong data-count="37">0</strong><span>Uscite</span>
-    </div>
-    <div class="hl">
-      <strong data-count="128">0</strong><span>Km di sentieri</span>
-    </div>
-    <div class="hl">
-      <strong data-count="12">0</strong><span>Grotte esplorate</span>
-    </div>
+    <div class="hl"><strong data-count="4">0</strong><span>Amici</span></div>
+    <div class="hl"><strong data-count="37">0</strong><span>Uscite</span></div>
+    <div class="hl"><strong data-count="128">0</strong><span>Km di sentieri</span></div>
+    <div class="hl"><strong data-count="12">0</strong><span>Grotte esplorate</span></div>
   </section>
 
   <!-- ABOUT -->
@@ -133,12 +128,21 @@
     </div>
   </section>
 
-  <!-- SHOWCASE (scrollytelling) -->
+  <!-- SHOWCASE (mobile-ready) -->
   <section id="showcase" class="showcase" aria-label="Showcase">
-    <div class="pane" data-img="assets/grotta.png"><h3>Grotte di ghiaccio</h3></div>
-    <div class="pane" data-img="assets/montagne.png"><h3>Albe in cresta</h3></div>
-    <div class="pane" data-img="assets/prato.png"><h3>Prati d’altura</h3></div>
-    <div class="pane" data-img="assets/albero.png"><h3>Guardiani del bosco</h3></div>
+    <!-- Sfondo: immagini assolute che sfumano (funziona su iOS/Android) -->
+    <div class="showcase-bg">
+      <img class="show-img active" src="assets/grotta.png"   alt="">
+      <img class="show-img"        src="assets/montagne.png" alt="">
+      <img class="show-img"        src="assets/prato.png"    alt="">
+      <img class="show-img"        src="assets/albero.png"   alt="">
+      <div class="show-gradient"></div>
+    </div>
+    <!-- Pannelli sticky (solo uno attivo visibile) -->
+    <div class="pane active"><h3>Grotte di ghiaccio</h3></div>
+    <div class="pane"><h3>Albe in cresta</h3></div>
+    <div class="pane"><h3>Prati d’altura</h3></div>
+    <div class="pane"><h3>Guardiani del bosco</h3></div>
   </section>
 
   <!-- TRIPS -->
@@ -169,7 +173,7 @@
     <p>© <span id="year"></span> ISUWATI • “Andiamo piano, ma andiamo lontano.”</p>
   </footer>
 
-  <!-- BOTTOM BAR MOBILE (sempre visibile) -->
+  <!-- BOTTOM BAR MOBILE -->
   <nav class="mobile-bar" aria-label="Azioni rapide">
     <button class="mb-btn" data-jump="#home" aria-label="Home">
       <svg viewBox="0 0 24 24"><path d="M12 3 3 10h3v8h12v-8h3z" fill="currentColor"/></svg>
