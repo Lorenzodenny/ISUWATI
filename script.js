@@ -1,4 +1,4 @@
-// ===== Start sempre dall'hero =====
+// ===== Start dall'hero in alto =====
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 function startAtHero() {
   if (!location.hash || location.hash === '#') {
@@ -72,18 +72,11 @@ new Swiper('.trips-swiper', {
   }
 });
 
-// ===== GSAP (parallax leggero sul contenitore) =====
+// ===== GSAP entrance =====
 gsap.registerPlugin(ScrollTrigger);
 gsap.from('.hero-title', { y: 30, opacity: 0, duration: .8, ease: 'power2.out' });
 gsap.from('.hero-sub',   { y: 24, opacity: 0, duration: .8, delay: .1, ease: 'power2.out' });
 gsap.from('.hero-cta',   { y: 20, opacity: 0, duration: .8, delay: .2, ease: 'power2.out' });
-
-if (matchMedia('(pointer:fine)').matches && window.innerWidth >= 980) {
-  gsap.to('.hero-bg', {
-    scale: 1.04, transformOrigin: '50% 50%',
-    scrollTrigger:{ trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
-  });
-}
 
 // ===== Features reveal =====
 gsap.utils.toArray('.feature').forEach(el=>{
@@ -91,7 +84,7 @@ gsap.utils.toArray('.feature').forEach(el=>{
     scrollTrigger:{ trigger:el, start:'top 85%' }});
 });
 
-// ===== Contatori con ri-trigger su scroll e su hover/tap =====
+// ===== Contatori: retrigger su viewport + hover/tap =====
 (function counters(){
   const items = document.querySelectorAll('.hl strong');
 
@@ -113,7 +106,6 @@ gsap.utils.toArray('.feature').forEach(el=>{
     requestAnimationFrame(tick);
   }
 
-  // retrigger quando entrano in viewport
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(entry=>{
       const el = entry.target;
@@ -121,16 +113,14 @@ gsap.utils.toArray('.feature').forEach(el=>{
       if (entry.isIntersecting){
         animateCount(el, target);
       } else {
-        // azzera quando esce per forzare retrigger al prossimo ingresso
         el.textContent = '0';
         el._animating = false;
       }
     });
-  }, { threshold: 0.35, rootMargin: '0px 0px -45% 0px' }); // escono prima, così si resetta anche su mobile
+  }, { threshold: 0.35, rootMargin: '0px 0px -45% 0px' });
 
   items.forEach(i=>{
     io.observe(i);
-    // retrigger manuale su hover/tap/focus
     ['mouseenter','touchstart','focus'].forEach(ev=>{
       i.parentElement.addEventListener(ev, ()=> animateCount(i, +i.dataset.count || 0), {passive:true});
     });
@@ -176,8 +166,28 @@ document.getElementById('mb-menu').addEventListener('click', ()=> setDrawer(true
 document.getElementById('mb-theme').addEventListener('click', toggleTheme);
 ['click','touchend'].forEach(ev => document.getElementById('mb-top').addEventListener(ev, (e)=>{ e.preventDefault(); goTop(); }, { passive:false }));
 
-// ===== Refresh Trigger a fine load =====
-window.addEventListener('load', () => { if (window.ScrollTrigger?.refresh) setTimeout(()=>ScrollTrigger.refresh(), 60); });
-
 // ===== Footer year =====
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// ===== HERO: imposta aspect-ratio dinamico = naturalWidth/naturalHeight =====
+(function setHeroAspect(){
+  const img = document.getElementById('heroImg');
+  const frame = img?.closest('.hero-frame');
+  if (!img || !frame) return;
+
+  function apply(){
+    // se già carica, naturalWidth/Height sono disponibili
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    if (w && h) {
+      frame.style.setProperty('--hero-ar', `${w} / ${h}`);
+    }
+  }
+
+  if (img.complete) apply();
+  else img.addEventListener('load', apply, { once:true });
+
+  // Se l'immagine dovesse cambiare via src in futuro
+  const obs = new MutationObserver(apply);
+  obs.observe(img, { attributes:true, attributeFilter:['src'] });
+})();

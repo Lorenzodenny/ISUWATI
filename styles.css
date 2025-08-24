@@ -12,13 +12,27 @@
 
 *{box-sizing:border-box}
 html,body{height:100%}
-html{scroll-behavior:smooth; overflow-x:hidden; scroll-padding-top:calc(var(--header-h) + 8px)}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;line-height:1.6;overflow-x:hidden; overscroll-behavior-x:none; position:relative}
+html{
+  scroll-behavior:smooth;
+  overflow-x:hidden;
+  scroll-padding-top:calc(var(--header-h) + 8px);
+}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;line-height:1.6;
+  overflow-x:hidden; overscroll-behavior-x:none; position:relative;
+}
 img{max-width:100%; height:auto; display:block}
 
 /* HEADER */
 .header-offset{height:calc(var(--header-h) + env(safe-area-inset-top))}
-.site-header{position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:80; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:calc(10px + env(safe-area-inset-top)) 14px 10px 14px; background:rgba(10,12,18,.6); backdrop-filter:saturate(160%) blur(8px); border-bottom:1px solid rgba(255,255,255,.06)}
+.site-header{
+  position:fixed; inset:0 0 auto 0; height:var(--header-h); z-index:80;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:calc(10px + env(safe-area-inset-top)) 14px 10px 14px;
+  background:rgba(10,12,18,.6); backdrop-filter:saturate(160%) blur(8px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
 :root.light .site-header{ background:rgba(255,255,255,.7); border-bottom:1px solid rgba(0,0,0,.08) }
 .brand{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--text); font-weight:800}
 .brand-logo{width:34px; height:34px; border-radius:8px; object-fit:contain}
@@ -32,15 +46,23 @@ img{max-width:100%; height:auto; display:block}
 .header-actions{display:flex; align-items:center; gap:10px}
 
 /* Toggle tema */
-.theme-toggle{ --size:44px; width:var(--size); height:var(--size); display:grid; place-items:center; padding:8px; overflow:hidden; color:#fff; background:var(--paper); border:1px solid rgba(255,255,255,.14); border-radius:999px; cursor:pointer}
+.theme-toggle{
+  --size:44px;
+  width:var(--size); height:var(--size);
+  display:grid; place-items:center;
+  padding:8px; overflow:hidden;
+  color:#fff; background:var(--paper);
+  border:1px solid rgba(255,255,255,.14); border-radius:999px; cursor:pointer;
+}
 :root.light .theme-toggle{ color:#111; border-color:rgba(0,0,0,.12) }
-.theme-toggle svg{width:22px; height:22px; display:block; margin:auto}
+.theme-toggle svg{width:22px; height:22px}
 .theme-toggle .icon-moon, .theme-toggle .icon-sun{ display:none }
 :root.light .theme-toggle .icon-moon{ display:block }
 :root:not(.light) .theme-toggle .icon-sun{ display:block }
 
 /* Burger */
-.burger{width:44px; height:44px; display:grid; place-content:center; gap:4px; background:var(--paper); border:1px solid rgba(255,255,255,.14); border-radius:12px; cursor:pointer}
+.burger{width:44px; height:44px; display:grid; place-content:center; gap:4px;
+  background:var(--paper); border:1px solid rgba(255,255,255,.14); border-radius:12px; cursor:pointer}
 :root.light .burger{border-color:rgba(0,0,0,.12)}
 .burger span{width:20px; height:2px; background:var(--text); display:block; border-radius:2px}
 @media(min-width:980px){ .burger{display:none} }
@@ -56,12 +78,28 @@ img{max-width:100%; height:auto; display:block}
 :root.light .drawer-nav a:hover{background:rgba(0,0,0,.06)}
 body.lock{ position:fixed; width:100%; overflow:hidden }
 
-/* HERO: immagine sempre intera */
-.hero{position:relative; min-height:100svh; display:grid; place-items:center; overflow:hidden}
-.hero-bg{position:absolute; inset:0; background:var(--bg)} /* letterboxing sul colore di sfondo */
-.hero-img{position:absolute; inset:0; width:100%; height:100%; object-fit:contain; object-position:center center; backface-visibility:hidden; transform:translateZ(0)} /* no crop */
-.hero-gradient{position:absolute; inset:0; background:var(--heroOverlay)}
-.hero-inner{position:relative; text-align:center; padding:40px 16px; max-width:1100px}
+/* ============================ */
+/*           HERO               */
+/* ============================ */
+.hero{ width:100%; }
+.hero-frame{
+  /* l’altezza è determinata da aspect-ratio dinamico settato via JS */
+  width:100%;
+  aspect-ratio: var(--hero-ar, 16/9);
+  position:relative;
+  overflow:hidden;
+  background:#000; /* sfondo neutro mentre l'immagine carica */
+}
+.hero-frame > img{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:contain; object-position:center;
+}
+.hero-overlay{position:absolute; inset:0; background:var(--heroOverlay); pointer-events:none}
+.hero-inner{
+  position:absolute; inset:0; display:grid; place-items:center;
+  text-align:center; padding:40px 16px; max-width:1100px; margin:0 auto;
+}
 .hero-title{font-family:Montserrat,Inter,sans-serif; font-size:clamp(40px,9vw,96px); font-weight:800; letter-spacing:.02em; margin:0 0 8px}
 .hero-title span{color:var(--accent)}
 .hero-sub{margin:0 0 18px; opacity:.95; font-size:clamp(14px,2.4vw,20px)}
@@ -72,6 +110,9 @@ body.lock{ position:fixed; width:100%; overflow:hidden }
 .btn.primary:hover{box-shadow:0 8px 24px rgba(46,204,113,.35)}
 .btn.ghost{background:transparent; border:2px solid rgba(255,255,255,.9); color:#fff}
 :root.light .btn.ghost{color:#0f172a; border-color:#0f172a}
+
+/* Vuoi forzare full-bleed (accettando crop)? sostituisci nell'immagine: object-fit:cover */
+/* .hero-frame > img { object-fit:cover } */
 
 /* HIGHLIGHTS */
 .highlights{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; padding:22px 16px; max-width:1100px; margin:0 auto}
@@ -104,12 +145,22 @@ body.lock{ position:fixed; width:100%; overflow:hidden }
 .showcase{ position:relative; height:420svh; }
 .showcase-bg{ position:sticky; top:0; height:100svh; overflow:hidden; z-index:0 }
 .show-img{ position:absolute; inset:0; opacity:0; transition:opacity .45s ease; }
-.show-img::before{ content:""; position:absolute; inset:0; background:var(--img) center / cover no-repeat; }
+.show-img::before{
+  content:""; position:absolute; inset:0;
+  background:var(--img) center / cover no-repeat;
+}
 .show-img.active{ opacity:1 }
 .show-gradient{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.35)) }
-.pane{ position:relative; z-index:1; position:sticky; top:calc(var(--header-h) + 10px); height:calc(100svh - var(--header-h) - var(--mobilebar-h) - env(safe-area-inset-bottom) - 20px); display:grid; place-items:end start; padding:20px; opacity:0; transition:opacity .35s ease;}
+.pane{
+  position:relative; z-index:1; position:sticky; top:calc(var(--header-h) + 10px);
+  height:calc(100svh - var(--header-h) - var(--mobilebar-h) - env(safe-area-inset-bottom) - 20px);
+  display:grid; place-items:end start; padding:20px; opacity:0; transition:opacity .35s ease;
+}
 .pane.active{ opacity:1 }
-.pane h3{ font-family:Montserrat,Inter,sans-serif; font-size:clamp(28px,6vw,56px); font-weight:800; color:#fff; background:rgba(0,0,0,.35); border-radius:12px; padding:10px 14px; box-shadow:var(--shadow)}
+.pane h3{
+  font-family:Montserrat,Inter,sans-serif; font-size:clamp(28px,6vw,56px); font-weight:800; color:#fff;
+  background:rgba(0,0,0,.35); border-radius:12px; padding:10px 14px; box-shadow:var(--shadow)
+}
 :root.light .pane h3{ background:rgba(255,255,255,.65); color:#0f172a }
 
 /* TRIPS */
@@ -129,7 +180,13 @@ body.lock{ position:fixed; width:100%; overflow:hidden }
 .footer-logo{width:28px; height:28px; opacity:.85; margin-bottom:8px}
 
 /* MOBILE BAR */
-.mobile-bar{ position:fixed; inset:auto 0 0 0; z-index:75; height:calc(var(--mobilebar-h) + env(safe-area-inset-bottom)); background:var(--paper); border-top:1px solid rgba(255,255,255,.1); display:grid; grid-template-columns:repeat(5,1fr); padding:6px 6px calc(6px + env(safe-area-inset-bottom)) 6px}
+.mobile-bar{
+  position:fixed; inset:auto 0 0 0; z-index:75;
+  height:calc(var(--mobilebar-h) + env(safe-area-inset-bottom));
+  background:var(--paper); border-top:1px solid rgba(255,255,255,.1);
+  display:grid; grid-template-columns:repeat(5,1fr);
+  padding:6px 6px calc(6px + env(safe-area-inset-bottom)) 6px;
+}
 :root.light .mobile-bar{border-top:1px solid rgba(0,0,0,.1)}
 .mb-btn{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; color:var(--muted); background:transparent; border:none; border-radius:12px; font:inherit; cursor:pointer}
 .mb-btn svg{width:22px; height:22px; display:block; margin:auto; fill:currentColor}
