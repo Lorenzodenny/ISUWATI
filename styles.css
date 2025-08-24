@@ -10,6 +10,7 @@
   --accent:#2d9f6f; --card:#ffffff; --shadow:0 10px 30px rgba(0,0,0,.08);
   --heroOverlay:linear-gradient(180deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,.35) 60%, rgba(0,0,0,.05) 100%);
 }
+
 *{box-sizing:border-box}
 html,body{height:100%}
 html{scroll-behavior:smooth}
@@ -35,18 +36,19 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 
 .header-actions{display:flex; align-items:center; gap:10px}
 
-/* Theme toggle button (icone sempre centrate) */
+/* Theme toggle — colore corretto per icone */
 .theme-toggle{
   --size:44px;
   width:var(--size); height:var(--size);
   display:grid; place-items:center;
-  padding:8px; overflow:hidden;  /* niente sbordi */
-  color:#111; background:var(--paper);
+  padding:8px; overflow:hidden;
+  color:#fff;                      /* bianco in dark */
+  background:var(--paper);
   border:1px solid rgba(255,255,255,.14); border-radius:999px; cursor:pointer;
 }
-.theme-toggle svg{width:22px; height:22px; display:block; margin:auto;}
 :root.light .theme-toggle{ color:#111; border-color:rgba(0,0,0,.12) }
-/* default: nascondi entrambe, poi mostra in base al tema */
+.theme-toggle svg{width:22px; height:22px; display:block; margin:auto;}
+/* nascondo entrambe, poi mostro in base al tema */
 .theme-toggle .icon-moon, .theme-toggle .icon-sun{ display:none }
 :root.light .theme-toggle .icon-moon{ display:block }
 :root:not(.light) .theme-toggle .icon-sun{ display:block }
@@ -58,7 +60,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 .burger span{width:20px; height:2px; background:var(--text); display:block; border-radius:2px}
 @media(min-width:980px){ .burger{display:none} }
 
-/* Backdrop per chiusura a tap fuori */
+/* Backdrop per chiusura */
 .backdrop{
   position:fixed; inset:0; z-index:79; background:rgba(0,0,0,.45);
   opacity:0; pointer-events:none; transition:opacity .25s ease;
@@ -118,22 +120,22 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 @media(min-width:760px){ .grid-gallery{grid-template-columns:repeat(3,1fr)} }
 @media(min-width:1100px){ .grid-gallery{grid-template-columns:repeat(4,1fr)} }
 
-/* Showcase (mobile-ready) */
-.showcase{ position:relative; height:420vh; }
-.showcase-bg{ position:sticky; top:0; height:100vh; overflow:hidden; z-index:0 }
+/* ===== Showcase (mobile-ready) ===== */
+.showcase{ position:relative; height:420svh; } /* svh per mobile */
+.showcase-bg{ position:sticky; top:0; height:100svh; overflow:hidden; z-index:0 }
 .show-img{
-  position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
-  opacity:0; transform:scale(1.04); transition:opacity .5s ease, transform .5s ease;
-  will-change: opacity, transform;
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  opacity:0; transition:opacity .5s ease;
 }
-.show-img.active{ opacity:1; transform:scale(1.02) }
+.show-img.active{ opacity:1 }
 .show-gradient{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.35)) }
 .pane{
   position:relative; z-index:1;
   position:sticky; top:calc(var(--header-h) + 10px);
-  height:calc(100vh - var(--header-h) - var(--mobilebar-h) - 20px);
+  height:calc(100svh - var(--header-h) - var(--mobilebar-h) - 20px);
   display:grid; place-items:end start; padding:20px;
-  opacity:0; transition:opacity .35s ease; will-change:opacity;
+  opacity:0; transition:opacity .35s ease;
 }
 .pane.active{ opacity:1 }
 .pane h3{
@@ -174,10 +176,10 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 .mb-btn.primary{color:var(--text); background:rgba(255,255,255,.06)}
 :root.light .mb-btn.primary{background:rgba(0,0,0,.06)}
 .mb-btn span{font-size:11px}
-/* icone tema bottom bar: default hidden, mostra in base al tema */
-.mb-moon, .mb-sun{ display:none }
-:root.light .mb-moon{ display:block }
-:root:not(.light) .mb-sun{ display:block }
+/* icone tema bottom bar: regole forti per evitare doppioni */
+#mb-theme .mb-moon, #mb-theme .mb-sun{ display:none !important }
+:root.light  #mb-theme .mb-moon{ display:block !important; color:#111 !important }
+:root:not(.light) #mb-theme .mb-sun{ display:block !important; color:#fff !important }
 
 @media(min-width:980px){ .mobile-bar{display:none} }
 

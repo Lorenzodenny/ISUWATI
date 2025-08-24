@@ -46,8 +46,11 @@ const io = new IntersectionObserver(es => {
 }, { rootMargin: '-45% 0px -50% 0px' });
 sections.forEach(s => io.observe(s));
 
-// GLightbox
-GLightbox({ selector: '.glightbox', openEffect: 'zoom', closeEffect: 'zoom', loop: true });
+// GLightbox (blur del link attivo per evitare warning aria-hidden)
+const lightbox = GLightbox({ selector: '.glightbox', openEffect: 'zoom', closeEffect: 'zoom', loop: true });
+lightbox.on('open', () => {
+  if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+});
 
 // Swiper (trips) — niente buco a sinistra
 new Swiper('.trips-swiper', {
@@ -114,31 +117,30 @@ document.querySelectorAll('.hl strong').forEach(el => {
   });
 });
 
-// SHOWCASE: mobile-friendly (immagini assolute + pane attivo)
-const showcase = document.querySelector('.showcase');
-if (showcase) {
-  const imgs  = Array.from(showcase.querySelectorAll('.show-img'));
-  const panes = Array.from(showcase.querySelectorAll('.pane'));
+// SHOWCASE: immagini assolute + IntersectionObserver (mobile OK)
+(() => {
+  const sc = document.querySelector('.showcase');
+  if (!sc) return;
+  const imgs  = Array.from(sc.querySelectorAll('.show-img'));
+  const panes = Array.from(sc.querySelectorAll('.pane'));
 
-  function setActiveByIndex(idx){
-    imgs.forEach((im,i)=> im.classList.toggle('active', i===idx));
-    panes.forEach((p ,i)=> p.classList.toggle('active',  i===idx));
-  }
-  // observer: il pane più vicino alla sticky top diventa attivo
-  const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64;
-  function pickActive(){
-    const targetY = headerH + 10;
-    let chosen = 0, best = Infinity;
-    panes.forEach((p,i)=>{
-      const d = Math.abs(p.getBoundingClientRect().top - targetY);
-      if (d < best){ best = d; chosen = i; }
+  const setActive = (i) => {
+    imgs.forEach((im,idx)=> im.classList.toggle('active', idx===i));
+    panes.forEach((p, idx)=> p.classList.toggle('active', idx===i));
+  };
+  setActive(0);
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && e.intersectionRatio > 0.55) {
+        const idx = panes.indexOf(e.target);
+        if (idx >= 0) setActive(idx);
+      }
     });
-    setActiveByIndex(chosen);
-  }
-  pickActive();
-  window.addEventListener('scroll', ()=> requestAnimationFrame(pickActive), {passive:true});
-  window.addEventListener('resize', pickActive);
-}
+  }, { threshold: [0.55, 0.6], rootMargin: '-10% 0px -10% 0px' });
+
+  panes.forEach(p => io.observe(p));
+})();
 
 // MOBILE BAR actions
 function jumpTo(sel){
