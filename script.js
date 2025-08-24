@@ -1,7 +1,7 @@
-// anno
+// Anno
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// tema (default dark), persist
+// Tema (default dark), persist
 const root = document.documentElement;
 const saved = localStorage.getItem('isuwati-theme');
 if (saved === 'light') root.classList.add('light');
@@ -12,7 +12,7 @@ function toggleTheme(){
 }
 document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
-// burger + drawer
+// Burger + drawer
 const burger = document.getElementById('burger');
 const drawer = document.getElementById('drawer');
 const drawerLinks = drawer.querySelectorAll('a');
@@ -25,11 +25,10 @@ const toggleDrawer = (open) => {
 burger.addEventListener('click', () => toggleDrawer(!drawer.classList.contains('open')));
 drawerLinks.forEach(a => a.addEventListener('click', () => toggleDrawer(false)));
 
-// nav attiva su scroll
+// Nav attiva su scroll
 const sections = [...document.querySelectorAll('section[id]')];
 const topLinks = [...document.querySelectorAll('.nav a')];
 const linkById = id => topLinks.find(a => a.getAttribute('href') === `#${id}`);
-
 const io = new IntersectionObserver(es => {
   es.forEach(e => {
     const l = linkById(e.target.id);
@@ -52,36 +51,71 @@ new Swiper('.trips-swiper', {
   breakpoints: { 640:{slidesPerView:1.3}, 960:{slidesPerView:2.2}, 1200:{slidesPerView:2.8} }
 });
 
-// GSAP: animazioni
+// GSAP: animazioni base
 gsap.registerPlugin(ScrollTrigger);
 gsap.from('.hero-title', { y: 30, opacity: 0, duration: .8, ease: 'power2.out' });
 gsap.from('.hero-sub',   { y: 24, opacity: 0, duration: .8, delay: .1, ease: 'power2.out' });
 gsap.from('.hero-cta',   { y: 20, opacity: 0, duration: .8, delay: .2, ease: 'power2.out' });
+// Parallax on scroll
 gsap.to('.hero-bg img', {
   scale: 1.12, ease: 'none',
   scrollTrigger:{ trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
 });
+// Parallax al mouse (desktop)
+const hero = document.querySelector('.hero');
+const heroImg = document.querySelector('.hero-bg img');
+if (hero && heroImg && matchMedia('(pointer:fine)').matches) {
+  hero.addEventListener('mousemove', (e)=>{
+    const r = hero.getBoundingClientRect();
+    const x = (e.clientX - r.left)/r.width  - .5;
+    const y = (e.clientY - r.top)/r.height - .5;
+    heroImg.style.transform = `scale(1.08) translate(${x*12}px, ${y*12}px)`;
+  });
+  hero.addEventListener('mouseleave', ()=>{
+    heroImg.style.transform = 'scale(1.06) translate(0,0)';
+  });
+}
+
+// Features fade-in
 gsap.utils.toArray('.feature').forEach(el=>{
   gsap.from(el,{ y:30, opacity:0, duration:.6, ease:'power2.out',
     scrollTrigger:{ trigger:el, start:'top 85%' }});
 });
 
-// Highlights counter
-document.querySelectorAll('.hl strong').forEach(el=>{
-  const target = +el.dataset.count;
-  let curr = 0;
+// Highlights counter (più lento + easing)
+function animateCount(el, target, duration = 3200) {
+  const start = performance.now();
+  const from = 0;
+  function tick(now){
+    const p = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+    el.textContent = Math.round(from + (target - from) * eased);
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+document.querySelectorAll('.hl strong').forEach(el => {
+  const target = +el.dataset.count || 0;
   ScrollTrigger.create({
     trigger: el, start: 'top 85%', once: true,
-    onEnter: () => {
-      const step = Math.max(1, Math.round(target/60));
-      const t = setInterval(()=>{
-        curr += step;
-        if (curr >= target){ curr = target; clearInterval(t); }
-        el.textContent = curr;
-      }, 16);
-    }
+    onEnter: () => animateCount(el, target, 3200)
   });
 });
+
+// Showcase: cambia sfondo mentre i pannelli sticky entrano
+const showcase = document.querySelector('.showcase');
+if (showcase) {
+  const panes = document.querySelectorAll('.showcase .pane');
+  if (panes[0]) showcase.style.backgroundImage = `url(${panes[0].dataset.img})`;
+  const so = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        showcase.style.backgroundImage = `url(${e.target.dataset.img})`;
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px', threshold: 0.01 });
+  panes.forEach(p => so.observe(p));
+}
 
 // MOBILE BAR actions
 function jumpTo(sel){

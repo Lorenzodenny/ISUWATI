@@ -35,12 +35,13 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 
 .header-actions{display:flex; align-items:center; gap:10px}
 
-/* Theme toggle button */
+/* Theme toggle button (icone sempre centrate) */
 .theme-toggle{
   width:44px; height:44px; display:grid; place-items:center;
   color:#111; background:var(--paper);
   border:1px solid rgba(255,255,255,.14); border-radius:999px; cursor:pointer;
 }
+.theme-toggle svg{display:block; margin:auto;}
 :root.light .theme-toggle{ color:#111; border-color:rgba(0,0,0,.12) }
 .theme-toggle .icon-sun{display:none; color:#fff}
 :root.light .theme-toggle .icon-moon{display:block}
@@ -72,8 +73,10 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 .hero-title span{color:var(--accent)}
 .hero-sub{margin:0 0 18px; opacity:.95; font-size:clamp(14px,2.4vw,20px)}
 .hero-cta{display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
-.btn{display:inline-block; padding:12px 18px; border-radius:999px; text-decoration:none; font-weight:700}
+.btn{display:inline-block; padding:12px 18px; border-radius:999px; text-decoration:none; font-weight:700; transition: transform .15s ease, box-shadow .15s ease}
+.btn:active{transform:translateY(1px) scale(0.99)}
 .btn.primary{background:var(--accent); color:#08110a}
+.btn.primary:hover{box-shadow:0 8px 24px rgba(46,204,113,.35)}
 .btn.ghost{background:transparent; border:2px solid rgba(255,255,255,.9); color:#fff}
 :root.light .btn.ghost{color:#0f172a; border-color:#0f172a}
 
@@ -104,6 +107,35 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 @media(min-width:760px){ .grid-gallery{grid-template-columns:repeat(3,1fr)} }
 @media(min-width:1100px){ .grid-gallery{grid-template-columns:repeat(4,1fr)} }
 
+/* Showcase (scrollytelling) */
+.showcase{
+  position:relative;
+  height:420vh; /* 4 pannelli */
+  background-position:center;
+  background-size:cover;
+  background-attachment:fixed;
+}
+.showcase::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.35));
+  pointer-events:none;
+}
+.pane{
+  position:sticky;
+  top:calc(var(--header-h) + 10px);
+  height:calc(100vh - var(--header-h) - var(--mobilebar-h) - 20px);
+  display:grid; place-items:end start;
+  padding:20px;
+}
+.pane h3{
+  font-family:Montserrat,Inter,sans-serif;
+  font-size:clamp(28px,6vw,56px);
+  font-weight:800; color:#fff;
+  background:rgba(0,0,0,.35);
+  border-radius:12px; padding:10px 14px; box-shadow:var(--shadow)
+}
+:root.light .pane h3{ background:rgba(255,255,255,.65); color:#0f172a }
+
 /* Trips (Swiper) */
 .trips-swiper{--h:360px; height:var(--h)}
 .trips-swiper .swiper-slide{display:flex; height:var(--h)}
@@ -129,7 +161,7 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
 :root.light .mobile-bar{border-top:1px solid rgba(0,0,0,.1)}
 .mb-btn{display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
   color:var(--muted); background:transparent; border:none; border-radius:12px; font:inherit; cursor:pointer}
-.mb-btn svg{width:22px; height:22px; fill:currentColor}
+.mb-btn svg{width:22px; height:22px; fill:currentColor; display:block; margin:auto}
 .mb-btn.primary{color:var(--text); background:rgba(255,255,255,.06)}
 :root.light .mb-btn.primary{background:rgba(0,0,0,.06)}
 .mb-btn span{font-size:11px}
@@ -143,5 +175,5 @@ body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui
   .section:last-of-type{padding-bottom:calc(70px + var(--mobilebar-h))}
 }
 
-/* Accessibilità */
+/* Focus */
 :focus-visible{outline:3px solid color-mix(in oklab, var(--accent) 60%, transparent); outline-offset:2px}
