@@ -1,19 +1,20 @@
-// --- Anno ---
-document.getElementById('year').textContent = new Date().getFullYear();
-
-// --- Forza apertura dall'HEADER (top) se non c'è #hash ---
+// ===== Start sempre dall'hero =====
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-function jumpTopOnStart(){
-  if (!location.hash) {
-    window.scrollTo(0,0);
-    // doppio passaggio per iOS/font/immagini
-    setTimeout(()=>window.scrollTo(0,0),0);
+function startAtHero() {
+  if (!location.hash || location.hash === '#') {
+    history.replaceState(null, '', '#home');
+  }
+  const home = document.getElementById('home');
+  if (home) {
+    home.scrollIntoView({ behavior: 'auto', block: 'start' });
+    setTimeout(() => home.scrollIntoView({ behavior: 'auto', block: 'start' }), 0);
+    setTimeout(() => window.scrollTo(0,0), 250);
   }
 }
-window.addEventListener('load', jumpTopOnStart);
-window.addEventListener('pageshow', () => { if (!location.hash) setTimeout(()=>window.scrollTo(0,0),0); });
+window.addEventListener('load', startAtHero);
+window.addEventListener('pageshow', startAtHero);
 
-// --- Tema persistente ---
+// ===== Tema persistente =====
 const root = document.documentElement;
 const saved = localStorage.getItem('isuwati-theme');
 if (saved === 'light') root.classList.add('light');
@@ -23,21 +24,14 @@ function toggleTheme(){
 }
 document.getElementById('themeToggle').addEventListener('click', toggleTheme);
 
-// --- Drawer / Backdrop / Body lock (niente movimento laterale) ---
-const burger   = document.getElementById('burger');
-const drawer   = document.getElementById('drawer');
+// ===== Drawer + backdrop + body-lock =====
+const burger = document.getElementById('burger');
+const drawer = document.getElementById('drawer');
 const backdrop = document.getElementById('backdrop');
 const drawerLinks = drawer.querySelectorAll('a');
 let scrollYBeforeLock = 0;
-function lockBody(){
-  scrollYBeforeLock = window.scrollY || window.pageYOffset;
-  document.body.style.top = `-${scrollYBeforeLock}px`;
-  document.body.classList.add('lock');
-}
-function unlockBody(){
-  document.body.classList.remove('lock'); document.body.style.top = '';
-  window.scrollTo(0, scrollYBeforeLock);
-}
+function lockBody(){ scrollYBeforeLock = window.scrollY || window.pageYOffset; document.body.style.top = `-${scrollYBeforeLock}px`; document.body.classList.add('lock'); }
+function unlockBody(){ document.body.classList.remove('lock'); document.body.style.top = ''; window.scrollTo(0, scrollYBeforeLock); }
 function setDrawer(open){
   drawer.classList.toggle('open', open);
   burger.setAttribute('aria-expanded', String(open));
@@ -50,7 +44,7 @@ backdrop.addEventListener('click', () => setDrawer(false));
 document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') setDrawer(false); });
 drawerLinks.forEach(a => a.addEventListener('click', () => setDrawer(false)));
 
-// --- Nav attiva ---
+// ===== Nav attiva su scroll =====
 const sections = [...document.querySelectorAll('section[id]')];
 const topLinks = [...document.querySelectorAll('.nav a')];
 const linkById = id => topLinks.find(a => a.getAttribute('href') === `#${id}`);
@@ -62,13 +56,13 @@ const sectionIO = new IntersectionObserver(es => {
 }, { rootMargin: '-45% 0px -50% 0px' });
 sections.forEach(s => sectionIO.observe(s));
 
-// --- GLightbox (niente warning aria-hidden) ---
+// ===== Lightbox =====
 const lightbox = GLightbox({ selector: '.glightbox', openEffect: 'zoom', closeEffect: 'zoom', loop: true });
 lightbox.on('open', () => { document.activeElement?.blur?.(); });
 
-// --- Swiper (trips) ---
+// ===== Swiper =====
 new Swiper('.trips-swiper', {
-  slidesPerView: 1.05, spaceBetween: 12, centeredSlides: false,
+  slidesPerView: 1.05, spaceBetween: 12,
   slidesOffsetBefore: 16, slidesOffsetAfter: 16,
   pagination: { el: '.swiper-pagination', clickable: true },
   breakpoints: {
@@ -78,52 +72,72 @@ new Swiper('.trips-swiper', {
   }
 });
 
-// --- GSAP base ---
+// ===== GSAP (parallax leggero sul contenitore) =====
 gsap.registerPlugin(ScrollTrigger);
 gsap.from('.hero-title', { y: 30, opacity: 0, duration: .8, ease: 'power2.out' });
 gsap.from('.hero-sub',   { y: 24, opacity: 0, duration: .8, delay: .1, ease: 'power2.out' });
 gsap.from('.hero-cta',   { y: 20, opacity: 0, duration: .8, delay: .2, ease: 'power2.out' });
 
-// Parallax SOLO desktop/pointer fine (evita “stiramenti” su mobile)
 if (matchMedia('(pointer:fine)').matches && window.innerWidth >= 980) {
-  gsap.to('.hero-bg img', {
-    scale: 1.08, ease: 'none',
+  gsap.to('.hero-bg', {
+    scale: 1.04, transformOrigin: '50% 50%',
     scrollTrigger:{ trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
   });
 }
 
-// --- Features reveal ---
+// ===== Features reveal =====
 gsap.utils.toArray('.feature').forEach(el=>{
   gsap.from(el,{ y:30, opacity:0, duration:.6, ease:'power2.out',
     scrollTrigger:{ trigger:el, start:'top 85%' }});
 });
 
-// --- Contatori: ogni volta che si passa sopra (su/giù) ---
-function animateCount(el, target, duration = 2200) {
-  const start = performance.now();
-  const from = +el.textContent.replace(/\D/g,'') || 0;
-  function tick(now){
-    const p = Math.min(1, (now - start) / duration);
-    const eased = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.round(from + (target - from) * eased);
-    if (p < 1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
-document.querySelectorAll('.hl strong').forEach(el => {
-  const target = +el.dataset.count || 0;
-  ScrollTrigger.create({
-    trigger: el,
-    start: 'top 85%',
-    end: 'bottom 15%',
-    onEnter:      () => animateCount(el, target, 2200),
-    onEnterBack:  () => animateCount(el, target, 2200),
-    onLeave:      () => { el.textContent = '0'; },
-    onLeaveBack:  () => { el.textContent = '0'; }
-  });
-});
+// ===== Contatori con ri-trigger su scroll e su hover/tap =====
+(function counters(){
+  const items = document.querySelectorAll('.hl strong');
 
-// --- SHOWCASE: immagini assolute + IO ---
+  function animateCount(el, to){
+    if (el._animating) return;
+    el._animating = true;
+    const start = performance.now();
+    const from  = 0;
+    const duration = 1400;
+
+    function tick(t){
+      const p = Math.min(1, (t - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(from + (to - from) * eased);
+      if (p < 1) requestAnimationFrame(tick);
+      else el._animating = false;
+    }
+    el.textContent = '0';
+    requestAnimationFrame(tick);
+  }
+
+  // retrigger quando entrano in viewport
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      const el = entry.target;
+      const target = +el.dataset.count || 0;
+      if (entry.isIntersecting){
+        animateCount(el, target);
+      } else {
+        // azzera quando esce per forzare retrigger al prossimo ingresso
+        el.textContent = '0';
+        el._animating = false;
+      }
+    });
+  }, { threshold: 0.35, rootMargin: '0px 0px -45% 0px' }); // escono prima, così si resetta anche su mobile
+
+  items.forEach(i=>{
+    io.observe(i);
+    // retrigger manuale su hover/tap/focus
+    ['mouseenter','touchstart','focus'].forEach(ev=>{
+      i.parentElement.addEventListener(ev, ()=> animateCount(i, +i.dataset.count || 0), {passive:true});
+    });
+  });
+})();
+
+// ===== Showcase (cross-fade) =====
 (() => {
   const sc = document.querySelector('.showcase'); if (!sc) return;
   const imgs  = Array.from(sc.querySelectorAll('.show-img'));
@@ -144,39 +158,26 @@ document.querySelectorAll('.hl strong').forEach(el => {
   panes.forEach(p => io.observe(p));
 })();
 
-// --- Mobile bar actions ---
-function jumpTo(sel){ document.querySelector(sel)?.scrollIntoView({behavior:'smooth', block:'start'}); }
-document.querySelectorAll('.mb-btn[data-jump]').forEach(btn=> btn.addEventListener('click', ()=> jumpTo(btn.dataset.jump)));
-document.getElementById('mb-menu').addEventListener('click', ()=> setDrawer(true));
-document.getElementById('mb-theme').addEventListener('click', toggleTheme);
-// --- Top affidabile su iOS + chiusura drawer se aperto ---
+// ===== Bottom bar actions =====
 function goTop(){
   const doScroll = () => {
     const target = document.getElementById('home');
-    if (target?.scrollIntoView) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-    // doppi fallback per Safari ostinato
-    setTimeout(() => window.scrollTo(0, 0), 450);
-    setTimeout(() => { document.documentElement.scrollTop = 0; document.body.scrollTop = 0; }, 800);
+    if (target?.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    else window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(()=>window.scrollTo(0,0), 450);
   };
-
-  if (drawer.classList.contains('open')) {
-    setDrawer(false);           // sblocca il body
-    setTimeout(doScroll, 320);  // attendi l’animazione del drawer
-  } else {
-    doScroll();
-  }
+  if (drawer.classList.contains('open')) { setDrawer(false); setTimeout(doScroll, 320); }
+  else doScroll();
 }
+document.querySelectorAll('.mb-btn[data-jump]').forEach(btn=>{
+  btn.addEventListener('click', ()=> document.querySelector(btn.dataset.jump)?.scrollIntoView({behavior:'smooth', block:'start'}));
+});
+document.getElementById('mb-menu').addEventListener('click', ()=> setDrawer(true));
+document.getElementById('mb-theme').addEventListener('click', toggleTheme);
+['click','touchend'].forEach(ev => document.getElementById('mb-top').addEventListener(ev, (e)=>{ e.preventDefault(); goTop(); }, { passive:false }));
 
-const topBtn = document.getElementById('mb-top');
-// gestisco sia click che touchend (iOS)
-['click','touchend'].forEach(evt =>
-  topBtn.addEventListener(evt, (e) => { e.preventDefault(); goTop(); }, { passive: false })
-);
-
-
-// --- Refresh trigger al termine del load per allineare calcoli ---
+// ===== Refresh Trigger a fine load =====
 window.addEventListener('load', () => { if (window.ScrollTrigger?.refresh) setTimeout(()=>ScrollTrigger.refresh(), 60); });
+
+// ===== Footer year =====
+document.getElementById('year').textContent = new Date().getFullYear();
