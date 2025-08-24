@@ -149,7 +149,34 @@ function jumpTo(sel){ document.querySelector(sel)?.scrollIntoView({behavior:'smo
 document.querySelectorAll('.mb-btn[data-jump]').forEach(btn=> btn.addEventListener('click', ()=> jumpTo(btn.dataset.jump)));
 document.getElementById('mb-menu').addEventListener('click', ()=> setDrawer(true));
 document.getElementById('mb-theme').addEventListener('click', toggleTheme);
-document.getElementById('mb-top').addEventListener('click', ()=> window.scrollTo({top:0, behavior:'smooth'}));
+// --- Top affidabile su iOS + chiusura drawer se aperto ---
+function goTop(){
+  const doScroll = () => {
+    const target = document.getElementById('home');
+    if (target?.scrollIntoView) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // doppi fallback per Safari ostinato
+    setTimeout(() => window.scrollTo(0, 0), 450);
+    setTimeout(() => { document.documentElement.scrollTop = 0; document.body.scrollTop = 0; }, 800);
+  };
+
+  if (drawer.classList.contains('open')) {
+    setDrawer(false);           // sblocca il body
+    setTimeout(doScroll, 320);  // attendi l’animazione del drawer
+  } else {
+    doScroll();
+  }
+}
+
+const topBtn = document.getElementById('mb-top');
+// gestisco sia click che touchend (iOS)
+['click','touchend'].forEach(evt =>
+  topBtn.addEventListener(evt, (e) => { e.preventDefault(); goTop(); }, { passive: false })
+);
+
 
 // --- Refresh trigger al termine del load per allineare calcoli ---
 window.addEventListener('load', () => { if (window.ScrollTrigger?.refresh) setTimeout(()=>ScrollTrigger.refresh(), 60); });
