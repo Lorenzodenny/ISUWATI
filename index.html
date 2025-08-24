@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ISUWATI • Expedition</title>
+  <meta name="description" content="ISUWATI: quattro amici tra grotte, montagne e sentieri." />
+  <link rel="icon" href="assets/logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/swiper@10/swiper-bundle.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- HEADER (fixed) -->
+  <header class="site-header" role="banner">
+    <a class="brand" href="#home" aria-label="ISUWATI home">
+      <img src="assets/logo.png" alt="" class="brand-logo" />
+      <span>ISUWATI</span>
+    </a>
+
+    <nav id="nav" class="nav" role="navigation" aria-label="Principale">
+      <a href="#home">Home</a>
+      <a href="#about">Chi siamo</a>
+      <a href="#gallery">Galleria</a>
+      <a href="#trips">Esplorazioni</a>
+      <a href="#contact">Contatti</a>
+    </nav>
+
+    <div class="header-actions">
+      <button id="themeToggle" class="theme-toggle" aria-label="Cambia tema">
+        <!-- luna nera (tema chiaro) -->
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.3A9 9 0 0 1 11.7 3a8 8 0 1 0 9.3 9.3Z" fill="currentColor"/>
+        </svg>
+        <!-- sole bianco con raggi (tema scuro) -->
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+          <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/>
+            <line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/>
+            <line x1="4.2" y1="4.2" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/>
+            <line x1="17.7" y1="6.3" x2="19.8" y2="4.2"/><line x1="4.2" y1="19.8" x2="6.3" y2="17.7"/>
+          </g>
+        </svg>
+      </button>
+
+      <button id="burger" class="burger" aria-label="Apri menu" aria-controls="drawer" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MOBILE DRAWER -->
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <nav class="drawer-nav" role="navigation" aria-label="Mobile">
+      <a href="#home">Home</a>
+      <a href="#about">Chi siamo</a>
+      <a href="#gallery">Galleria</a>
+      <a href="#trips">Esplorazioni</a>
+      <a href="#contact">Contatti</a>
+    </nav>
+  </aside>
+
+  <!-- OFFSET per header fixed -->
+  <div class="header-offset" aria-hidden="true"></div>
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+    <div class="hero-bg">
+      <img src="assets/isuwati.png" alt="ISUWATI Expedition" />
+      <div class="hero-gradient"></div>
+    </div>
+    <div class="hero-inner">
+      <h1 class="hero-title"><span>ISUWATI</span> Expedition</h1>
+      <p class="hero-sub">Grotte di ghiaccio, creste e boschi. Quattro amici, tante storie.</p>
+      <div class="hero-cta">
+        <a class="btn primary" href="#about">Conosci il team</a>
+        <a class="btn ghost" href="#gallery">Guarda la galleria</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section class="highlights" aria-label="Dati sintetici">
+    <div class="hl">
+      <strong data-count="4">0</strong><span>Amici</span>
+    </div>
+    <div class="hl">
+      <strong data-count="37">0</strong><span>Uscite</span>
+    </div>
+    <div class="hl">
+      <strong data-count="128">0</strong><span>Km di sentieri</span>
+    </div>
+    <div class="hl">
+      <strong data-count="12">0</strong><span>Grotte esplorate</span>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section">
+    <header class="section-head">
+      <h2>Chi siamo</h2>
+      <p>Esploriamo montagne e cavità, raccontando i percorsi con foto, video e appunti.</p>
+    </header>
+    <div class="features">
+      <article class="feature card"><img src="assets/grotta.png" alt="Grotta" loading="lazy"><div class="feature-body"><h3>Grotte</h3><p>Stalattiti, acqua, silenzio. Lì dove la luce arriva piano.</p></div></article>
+      <article class="feature card"><img src="assets/montagne.png" alt="Montagne" loading="lazy"><div class="feature-body"><h3>Montagne</h3><p>Albe fredde e panorami che tolgono il fiato.</p></div></article>
+      <article class="feature card"><img src="assets/prato.png" alt="Prato" loading="lazy"><div class="feature-body"><h3>Prati</h3><p>Il ritmo giusto tra una salita e l’altra.</p></div></article>
+      <article class="feature card"><img src="assets/albero.png" alt="Bosco" loading="lazy"><div class="feature-body"><h3>Boschi</h3><p>Radici profonde, bussola naturale.</p></div></article>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="gallery" class="section">
+    <header class="section-head">
+      <h2>Galleria</h2>
+      <p>Clicca per aprire in lightbox. Le immagini sono in <code>/assets</code>.</p>
+    </header>
+    <div class="grid-gallery">
+      <a href="assets/montagne.png" class="glightbox item"><img src="assets/montagne.png" alt="Montagne" loading="lazy"></a>
+      <a href="assets/grotta.png"   class="glightbox item"><img src="assets/grotta.png"   alt="Grotta"   loading="lazy"></a>
+      <a href="assets/prato.png"    class="glightbox item"><img src="assets/prato.png"    alt="Prato"    loading="lazy"></a>
+      <a href="assets/albero.png"   class="glightbox item"><img src="assets/albero.png"   alt="Albero"   loading="lazy"></a>
+      <a href="assets/grotta.png"   class="glightbox item"><img src="assets/grotta.png"   alt="" loading="lazy"></a>
+      <a href="assets/montagne.png" class="glightbox item"><img src="assets/montagne.png" alt="" loading="lazy"></a>
+    </div>
+  </section>
+
+  <!-- TRIPS -->
+  <section id="trips" class="section">
+    <header class="section-head"><h2>Esplorazioni</h2><p>Mini-diario scorrevole. Duplica le slide per aggiungerne.</p></header>
+    <div class="swiper trips-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><article class="trip card"><img src="assets/montagne.png" alt=""><div class="trip-body"><h3>Anello del Lago</h3><p>12km • +650m • 4h30</p><small>Panorami in cresta.</small></div></article></div>
+        <div class="swiper-slide"><article class="trip card"><img src="assets/grotta.png" alt=""><div class="trip-body"><h3>Grotta Nord</h3><p>2h • caschetto & imbrago</p><small>Camere di calcite.</small></div></article></div>
+        <div class="swiper-slide"><article class="trip card"><img src="assets/prato.png" alt=""><div class="trip-body"><h3>Pianoro Alto</h3><p>8km • +320m • 3h</p><small>Prati ondulati.</small></div></article></div>
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section">
+    <header class="section-head"><h2>Contatti</h2><p>Vuoi unirti a una camminata o proporre una grotta? Scrivici!</p></header>
+    <div class="contact-grid">
+      <a class="card link" href="mailto:isuwati@example.com">✉️ isuwati@example.com</a>
+      <a class="card link" href="#" target="_blank" rel="noopener">📸 Instagram</a>
+      <a class="card link" href="#" target="_blank" rel="noopener">💻 GitHub</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <img src="assets/logo.png" alt="" class="footer-logo">
+    <p>© <span id="year"></span> ISUWATI • “Andiamo piano, ma andiamo lontano.”</p>
+  </footer>
+
+  <!-- BOTTOM BAR MOBILE (sempre visibile) -->
+  <nav class="mobile-bar" aria-label="Azioni rapide">
+    <button class="mb-btn" data-jump="#home" aria-label="Home">
+      <svg viewBox="0 0 24 24"><path d="M12 3 3 10h3v8h12v-8h3z" fill="currentColor"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="mb-btn" data-jump="#gallery" aria-label="Galleria">
+      <svg viewBox="0 0 24 24"><path d="M21 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2zM8 11l3 3 2-2 4 4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      <span>Galleria</span>
+    </button>
+    <button class="mb-btn primary" id="mb-menu" aria-label="Menu">
+      <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+      <span>Menu</span>
+    </button>
+    <button class="mb-btn" id="mb-theme" aria-label="Tema">
+      <svg class="mb-moon" viewBox="0 0 24 24"><path d="M21 12.3A9 9 0 0 1 11.7 3a8 8 0 1 0 9.3 9.3Z" fill="currentColor"/></svg>
+      <svg class="mb-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.2" y1="4.2" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.8" y2="19.8"/><line x1="17.7" y1="6.3" x2="19.8" y2="4.2"/><line x1="4.2" y1="19.8" x2="6.3" y2="17.7"/></g></svg>
+      <span>Tema</span>
+    </button>
+    <button class="mb-btn" id="mb-top" aria-label="Top">
+      <svg viewBox="0 0 24 24"><path d="M12 5l7 7H5z" fill="currentColor"/></svg>
+      <span>Top</span>
+    </button>
+  </nav>
+
+  <!-- Libs -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
