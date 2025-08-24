@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- HEADER (fixed) -->
+  <!-- HEADER -->
   <header class="site-header" role="banner">
     <a class="brand" href="#home" aria-label="ISUWATI home">
       <img src="assets/logo.png" alt="" class="brand-logo" />
@@ -32,24 +32,10 @@
 
     <div class="header-actions">
       <button id="themeToggle" class="theme-toggle" aria-label="Cambia tema">
-        <!-- Luna (tema chiaro) -->
-        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M21 12.3A9 9 0 0 1 11.7 3a8 8 0 1 0 9.3 9.3Z" fill="currentColor"/>
-        </svg>
-        <!-- Sole (tema scuro) -->
-        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
-          <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4"/>
-            <line x1="12" y1="2"  x2="12" y2="5"/>
-            <line x1="12" y1="19" x2="12" y2="22"/>
-            <line x1="2"  y1="12" x2="5"  y2="12"/>
-            <line x1="19" y1="12" x2="22" y2="12"/>
-            <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
-            <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-            <line x1="17.66" y1="6.34"  x2="19.78" y2="4.22"/>
-            <line x1="4.22"  y1="19.78" x2="6.34"  y2="17.66"/>
-          </g>
-        </svg>
+        <!-- Luna (light) -->
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.3A9 9 0 0 1 11.7 3a8 8 0 1 0 9.3 9.3Z" fill="currentColor"/></svg>
+        <!-- Sole (dark) -->
+        <svg class="icon-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
       </button>
 
       <button id="burger" class="burger" aria-label="Apri menu" aria-controls="drawer" aria-expanded="false">
@@ -58,10 +44,8 @@
     </div>
   </header>
 
-  <!-- BACKDROP (tap fuori chiude) -->
   <div id="backdrop" class="backdrop" hidden></div>
 
-  <!-- MOBILE DRAWER -->
   <aside id="drawer" class="drawer" aria-hidden="true">
     <nav class="drawer-nav" role="navigation" aria-label="Mobile">
       <a href="#home">Home</a>
@@ -73,13 +57,12 @@
     </nav>
   </aside>
 
-  <!-- OFFSET per header fixed + safe area -->
   <div class="header-offset" aria-hidden="true"></div>
 
   <!-- HERO -->
   <section id="home" class="hero">
     <div class="hero-bg">
-      <img src="assets/isuwati.png" alt="ISUWATI Expedition" />
+      <img src="assets/isuwati.png" alt="ISUWATI Expedition">
       <div class="hero-gradient"></div>
     </div>
     <div class="hero-inner">
@@ -130,7 +113,7 @@
     </div>
   </section>
 
-  <!-- SHOWCASE (mobile-ready) -->
+  <!-- SHOWCASE -->
   <section id="showcase" class="showcase" aria-label="Showcase">
     <div class="showcase-bg">
       <img class="show-img active" src="assets/grotta.png"   alt="">
@@ -173,44 +156,27 @@
     <p>© <span id="year"></span> ISUWATI • “Andiamo piano, ma andiamo lontano.”</p>
   </footer>
 
-  <!-- BOTTOM BAR MOBILE -->
+  <!-- BOTTOM BAR -->
   <nav class="mobile-bar" aria-label="Azioni rapide">
     <button class="mb-btn" data-jump="#home" aria-label="Home">
-      <svg viewBox="0 0 24 24"><path d="M12 3 3 10h3v8h12v-8h3z" fill="currentColor"/></svg>
-      <span>Home</span>
+      <svg viewBox="0 0 24 24"><path d="M12 3 3 10h3v8h12v-8h3z" fill="currentColor"/></svg><span>Home</span>
     </button>
     <button class="mb-btn" data-jump="#gallery" aria-label="Galleria">
-      <svg viewBox="0 0 24 24"><path d="M21 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2zM8 11l3 3 2-2 4 4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-      <span>Galleria</span>
+      <svg viewBox="0 0 24 24"><path d="M21 7v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2zM8 11l3 3 2-2 4 4" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>Galleria</span>
     </button>
     <button class="mb-btn primary" id="mb-menu" aria-label="Menu">
-      <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" fill="none"/></svg>
-      <span>Menu</span>
+      <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" fill="none"/></svg><span>Menu</span>
     </button>
     <button class="mb-btn" id="mb-theme" aria-label="Tema">
       <svg class="mb-moon" viewBox="0 0 24 24"><path d="M21 12.3A9 9 0 0 1 11.7 3a8 8 0 1 0 9.3 9.3Z" fill="currentColor"/></svg>
-      <svg class="mb-sun" viewBox="0 0 24 24" aria-hidden="true">
-        <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4"/>
-          <line x1="12" y1="2"  x2="12" y2="5"/>
-          <line x1="12" y1="19" x2="12" y2="22"/>
-          <line x1="2"  y1="12" x2="5"  y2="12"/>
-          <line x1="19" y1="12" x2="22" y2="12"/>
-          <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/>
-          <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/>
-          <line x1="17.66" y1="6.34"  x2="19.78" y2="4.22"/>
-          <line x1="4.22"  y1="19.78" x2="6.34"  y2="17.66"/>
-        </g>
-      </svg>
+      <svg class="mb-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/></g></svg>
       <span>Tema</span>
     </button>
     <button class="mb-btn" id="mb-top" aria-label="Top">
-      <svg viewBox="0 0 24 24"><path d="M12 5l7 7H5z" fill="currentColor"/></svg>
-      <span>Top</span>
+      <svg viewBox="0 0 24 24"><path d="M12 5l7 7H5z" fill="currentColor"/></svg><span>Top</span>
     </button>
   </nav>
 
-  <!-- Libs -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <script src="https://unpkg.com/swiper@10/swiper-bundle.min.js"></script>
