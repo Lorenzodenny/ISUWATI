@@ -2,7 +2,9 @@
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)">
   <title>ISUWATI • Expedition</title>
   <meta name="description" content="ISUWATI: quattro amici tra grotte, montagne e sentieri." />
   <link rel="icon" href="assets/logo.png" />
@@ -30,11 +32,11 @@
 
     <div class="header-actions">
       <button id="themeToggle" class="theme-toggle" aria-label="Cambia tema">
-        <!-- Luna nera (tema chiaro) -->
+        <!-- Luna (tema chiaro) -->
         <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M21 12.3A9 9 0 0 1 11.7 3a8 8 0 1 0 9.3 9.3Z" fill="currentColor"/>
         </svg>
-        <!-- Sole bianco con raggi (tema scuro) -->
+        <!-- Sole (tema scuro) -->
         <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
           <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="4"/>
@@ -56,7 +58,7 @@
     </div>
   </header>
 
-  <!-- BACKDROP (chiusura a tap fuori) -->
+  <!-- BACKDROP (tap fuori chiude) -->
   <div id="backdrop" class="backdrop" hidden></div>
 
   <!-- MOBILE DRAWER -->
@@ -71,7 +73,7 @@
     </nav>
   </aside>
 
-  <!-- OFFSET per header fixed -->
+  <!-- OFFSET per header fixed + safe area -->
   <div class="header-offset" aria-hidden="true"></div>
 
   <!-- HERO -->
@@ -116,7 +118,7 @@
   <section id="gallery" class="section">
     <header class="section-head">
       <h2>Galleria</h2>
-      <p>Clicca per aprire in lightbox le immagini.
+      <p>Clicca per aprire in lightbox. Le immagini sono in <code>/assets</code>.</p>
     </header>
     <div class="grid-gallery">
       <a href="assets/montagne.png" class="glightbox item"><img src="assets/montagne.png" alt="Montagne" loading="lazy"></a>
@@ -130,7 +132,6 @@
 
   <!-- SHOWCASE (mobile-ready) -->
   <section id="showcase" class="showcase" aria-label="Showcase">
-    <!-- Sfondo: immagini assolute che cross-fadano -->
     <div class="showcase-bg">
       <img class="show-img active" src="assets/grotta.png"   alt="">
       <img class="show-img"        src="assets/montagne.png" alt="">
@@ -138,7 +139,6 @@
       <img class="show-img"        src="assets/albero.png"   alt="">
       <div class="show-gradient"></div>
     </div>
-    <!-- Pannelli sticky (solo uno visibile) -->
     <div class="pane active"><h3>Grotte di ghiaccio</h3></div>
     <div class="pane"><h3>Albe in cresta</h3></div>
     <div class="pane"><h3>Prati d’altura</h3></div>
